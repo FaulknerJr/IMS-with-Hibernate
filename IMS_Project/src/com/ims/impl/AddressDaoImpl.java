@@ -88,10 +88,23 @@ public class AddressDaoImpl implements AddressDao {
 	@Override
 	public boolean updateAddress(Address a) {
 		Session s = ConnectionUtil.getSession();
-		s.update(a); 
-		System.out.println("Address up to date.");
-		s.close();
-		return true;
+		Transaction tx = null;
+		try{
+			tx = s.beginTransaction();
+			int id = (Integer) s.save(a);
+			tx.commit();
+			System.out.println("Address up to date");
+			return id > 0;
+		} catch(HibernateException e){
+			System.out.println("Null entered into non-null field");
+			e.printStackTrace();
+			if(tx != null){
+				tx.rollback();
+			}
+			return false;
+		} finally{
+			s.close();
+		}
 	}
 
 	@Override

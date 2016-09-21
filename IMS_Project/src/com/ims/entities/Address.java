@@ -10,6 +10,11 @@ import javax.persistence.Table;
 @Table(name="IMS_ADDRESS")
 public class Address {
 	
+	@Override
+	public String toString() {
+		return "Address " + street + ", " + city + ", " + state + ", " + zip;
+	}
+	
 	@Column(name="A_STREET")
 	private String street;
 	@Column(name="A_CITY")
