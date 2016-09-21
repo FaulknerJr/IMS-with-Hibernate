@@ -5,17 +5,23 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import com.ims.dao.AddressDao;
 import com.ims.entities.Address;
 import com.ims.util.ConnectionUtil;
 
 public class AddressDaoImpl implements AddressDao {
-
+	
+	private SessionFactory factory = null;
+	
 	@Override
 	public Address getAddressById(int id) {
 		Session session = ConnectionUtil.getSession();
+		
 		Address a = (Address) session.load(Address.class, id);
 		a.getCity();
 
@@ -106,16 +112,23 @@ public class AddressDaoImpl implements AddressDao {
 	@Override
 	public boolean enterNewAddress(Address a) {
 		Session s = ConnectionUtil.getSession();
+		Transaction tx = null;
 		try{
-			s.save(a);
-			System.out.println("Address has been entered");
-			s.close();
-			return true;
-		}catch(Exception e){
+			
+			tx = s.beginTransaction();
+			int id = (Integer)s.save(a);
+			tx.commit();
+			
+			return id > 0;
+		}catch(HibernateException e){
 			System.out.println("Null entered into non-null field");
 			System.out.println(e.getMessage());
-			s.close();
+			if(tx != null){
+				tx.rollback();
+			}
 			return false;
+		} finally{
+			s.close();
 		}
 	}
 
