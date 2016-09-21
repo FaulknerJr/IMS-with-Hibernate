@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect
+		</property>
+		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+
+		<property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>
+		<property name="hibernate.connection.username">IMS</property>
+		<property name="hibernate.connection.password">p4ssword</property>
+
+		<property name="hibernate.show_sql">true</property>
+
+		<mapping class="com.ims.entities.Address" />
+		<mapping class="com.ims.entities.PO_Line" />
+		<mapping class="com.ims.entities.Product" />
+		<mapping class="com.ims.entities.PurchaseOrder" />
+		<mapping class="com.ims.entities.RetailerInventory" />
+		<mapping class="com.ims.entities.RetailerSale" />
+		
+	</session-factory>
+</hibernate-configuration>
